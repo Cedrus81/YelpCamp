@@ -1,6 +1,4 @@
-const express = require('express');
 const mongoose = require('mongoose')
-const path = require('path');
 const cities = require('./cities');
 const { places, descriptors } = require('./seedhelpers');
 const Campground = require('../models/campgrounds')
@@ -8,7 +6,14 @@ const Campground = require('../models/campgrounds')
 const loremIpsum = require("lorem-ipsum").loremIpsum;
 // ^^ lorem ipsum gibberish generator
 const db = mongoose.connection;
-mongoose.connect('mongodb://localhost:27017/yelp-camp')
+
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+
+mongoose.connect(dbUrl)
     .then(() => {
         console.log("Connection open!");
     })
